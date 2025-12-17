@@ -42,8 +42,9 @@ cd kitti-depth-comparison
 2. Create a virtual environment and install dependencies with [uv](https://github.com/astral-sh/uv):
 
 ```bash
-uv venv && uv pip install -r requirements.txt
+uv venv
 source .venv/bin/activate
+uv pip install -r requirements.txt
 ```
 
 ## Usage
@@ -59,6 +60,7 @@ Or a monocular method like DepthAnything:
 ```bash
 python main.py --sequence 2011_09_26_drive_0048 --method depthanything
 ```
+
 **I was NOT able to test Metric3D on my mps device.** Try with GPU at your own risk.
 
 Downloading KITTI zip files and deep learning model weights probably take the majority of the running time.

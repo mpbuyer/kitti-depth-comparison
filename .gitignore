@@ -1,0 +1,17 @@
+# Python env or cache
+__pycache__/
+.venv/
+
+# created dirs
+Depth-Anything-V2/
+output/
+src/__pycache__/
+
+# KITTI sequences
+[0-9]*_[0-9]*_[0-9]*/
+
+# specific files
+requirements_uni.txt
+unidepth_testing.py
+YOLO_testing.py
+yolo11n-seg.pt

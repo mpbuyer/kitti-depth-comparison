@@ -1,0 +1,84 @@
+# KITTI Depth Comparison Configuration
+
+# Stereo Matching Parameters (SGBM)
+stereo:
+  min_disparity: 0
+  num_disparities: 128  # Must be divisible by 16
+  block_size: 7  # Odd number, typically 3-11
+  p1_multiplier: 8  # P1 = p1_multiplier * channels * block_size^2
+  p2_multiplier: 32  # P2 = p2_multiplier * channels * block_size^2
+  disp12_max_diff: 2
+  uniqueness_ratio: 10
+  speckle_window_size: 150
+  speckle_range: 32
+  pre_filter_cap: 63
+  mode: "SGBM"  # SGBM, SGBM_3WAY, or HH
+
+# DepthAnything Parameters
+depthanything2:
+  encoder: "vits"  # Options: vits, vitb, vitl (small, base, large)
+  dataset: "vkitti"  # vkitti for outdoor, hypersim for indoor
+  max_depth: 80  # Maximum depth in meters (80 for outdoor, 20 for indoor)
+  checkpoint_dir: "Depth-Anything-V2/metric_depth/checkpoints"
+
+# UniDepth Parameters
+unidepth:
+  backbone: "vits14"  # Options: vits14, vitl14, cnvnxtl (only with v1)
+  version: "v2"  # v2 or v1
+  resolution: 9  #0-9, higher is slower, better accuracy
+  interpolation: "bilinear"
+
+# Metric3D Parameters
+metric3d:
+  model: "metric3d_vit_small"
+  input_height: 616
+  input_width: 1064
+  padding: [123.675, 116.28, 103.53]
+  std: [58.395, 57.12, 57.375]
+
+# Video Output Settings
+video:
+  fps: 10
+  width: 1500
+  height: 1000
+  codec: "avc1"
+  output_dir: "output"
+
+# Visualization Settings
+visualization:
+  clip_distance: 2.0  # Minimum distance for LiDAR points (meters)
+  max_depth_vis: 100  # Maximum depth for visualization (meters)
+  car_color: [0, 255, 0]  # RGB color for car bounding boxes
+  other_color: [255, 0, 0]  # RGB color for other object bounding boxes
+  bbox_thickness: 2
+  text_color: [0, 128, 255]  # RGB color for depth text
+  label_color: [0, 128, 255]  # RGB color for object labels
+  
+# Text Scaling Parameters
+text_scaling:
+  base_font_scale: 0.6
+  base_thickness: 2
+  reference_width: 100
+  min_font_scale: 0.6
+  max_font_scale: 1.5
+  min_thickness: 2
+  max_thickness: 3
+
+# Data Processing
+processing:
+  camera: 2  # keep cam 2 for stereo; camera index (2 = left color, 3 = right color)
+  filter_outliers: true
+  depth_technique: "closest"  # Options: closest, median
+
+bird_eye_view:
+  cam_pos: -1.65 # KITTI cam height
+  x_resolution: 0.05 # meters per pixel
+  z_resolution: 0.1
+  # in camera coordinates:
+  xmin: -10
+  xmax: 10
+  zmin: 3
+  zmax: 40
+
+segment:
+  categories: [0,1] # roads + sidewalks

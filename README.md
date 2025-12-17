@@ -2,6 +2,8 @@
 
 Outputs a mp4 video visualizing [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) dataset tracklets while comparing depth estimation methods. By "depth" I mean closest point to LiDAR in the forward direction inside bounding boxes. Depth from point clouds is always included with the comparison being from semi-global block matching in stereo vision or deep learning such as [DepthAnything](https://github.com/DepthAnything/Depth-Anything-V2/tree/main)
 
+[Example video](videos/2011_09_26_drive_0005_stereo_dist.mp4)
+
 [![Example video: stereo matching, radial distance instead of depth](videos/stereo_dist_thumbnail.jpg)](videos/2011_09_26_drive_0005_stereo_dist.mp4)
 
 ## Features
@@ -33,7 +35,7 @@ Outputs a mp4 video visualizing [KITTI](https://www.cvlibs.net/datasets/kitti/ra
 1. Clone this repository:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/mpbuyer/kitti-depth-comparison
 cd kitti-depth-comparison
 ```
 
@@ -120,6 +122,8 @@ Note: Not all sequences have tracklets and point clouds.
 
 # Bonus Bird-Eye-View
 Bird-Eye-View (BEV) based on the depth map from the method used on the left colored front camera. A bumpy ride with occlusions!
+
+[Example BEV video](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
 
 [![Example video: depth map from unidepth, Bird-eye-view](videos/unidepth_BEV_thumbnail.jpg)](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
 

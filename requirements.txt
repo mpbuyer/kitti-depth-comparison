@@ -3,6 +3,7 @@ ipykernel
 numpy>=1.21.0
 opencv-python>=4.5.0
 matplotlib>=3.3.0
+pyyaml
 Pillow>=8.0.0
 scipy
 torch>=1.9.0

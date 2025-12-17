@@ -4,7 +4,7 @@ Outputs a mp4 video visualizing [KITTI](https://www.cvlibs.net/datasets/kitti/ra
 
 [Example video](videos/2011_09_26_drive_0005_stereo_dist.mp4)
 
-[![Example video: stereo matching, radial distance instead of depth](videos/stereo_dist_thumbnail.jpg)](videos/2011_09_26_drive_0005_stereo_dist.mp4)
+![first frame](videos/stereo_dist_thumbnail.jpg)
 
 ## Features
 
@@ -125,7 +125,7 @@ Bird-Eye-View (BEV) based on the depth map from the method used on the left colo
 
 [Example BEV video](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
 
-[![Example video: depth map from unidepth, Bird-eye-view](videos/unidepth_BEV_thumbnail.jpg)](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
+![first frame](videos/unidepth_BEV_thumbnail.jpg)
 
 example:
 

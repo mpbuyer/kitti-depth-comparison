@@ -58,7 +58,7 @@ python main.py --sequence 2011_09_26_drive_0048 --method stereo
 Or a monocular method like DepthAnything:
 
 ```bash
-python main.py --sequence 2011_09_26_drive_0048 --method depthanything
+python main.py --sequence 2011_09_26_drive_0048 --method depthanything2
 ```
 
 **I was NOT able to test Metric3D on my mps device.** Try with GPU at your own risk.
@@ -69,7 +69,7 @@ Downloading KITTI zip files and deep learning model weights probably take the ma
 
 * `--sequence`: KITTI sequence to download and process (e.g., `2011_09_26_drive_0048`)
 
-* `--method`: Depth comparison method - `stereo` or `depthanything` or `unidepth`
+* `--method`: Depth comparison method - `stereo` or `depthanything2` or `unidepth`
 
 #### Optional
 

@@ -2,6 +2,8 @@
 
 Outputs a mp4 video comparing depth estimation methods on [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) sequences. Depth being the closest point to LiDAR or camera in the forward direction inside 3d bounding boxes/"tracklets". Depth from LiDAR is always included with the comparison being a method using a singular or stereo camera.
 
+https://github.com/user-attachments/assets/fcdf5cb9-db62-4637-beee-a75948f66b22
+
 ## Results
 Mean Absolute Error in meters of each camera method (using LiDAR as ground truth) computed on 7 select sequences (in the city category) with **bold** being the best on the corresponding sequence. *Overall* treats the sequences together.
 
@@ -139,7 +141,7 @@ Note: Not all sequences have tracklets and point clouds.
 # Bonus Bird-Eye-View
 Bird-Eye-View (BEV) based on the depth map from the method used on the left colored front camera. A bumpy ride with occlusions!
 
-[Example BEV video](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
+https://github.com/user-attachments/assets/fe382bbb-cb2e-4973-811c-f9e3cbb968b0
 
 example:
 

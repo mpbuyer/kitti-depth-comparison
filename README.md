@@ -1,20 +1,28 @@
 # KITTI Depth Comparison
 
-Outputs a mp4 video visualizing [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) dataset tracklets while comparing depth estimation methods. By "depth" I mean closest point to LiDAR in the forward direction inside bounding boxes. Depth from point clouds is always included with the comparison being from semi-global block matching in stereo vision or deep learning such as [DepthAnything](https://github.com/DepthAnything/Depth-Anything-V2/tree/main)
+Outputs a mp4 video comparing depth estimation methods on [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) sequences. Depth being the closest point to LiDAR or camera in the forward direction inside 3d bounding boxes/"tracklets". Depth from LiDAR is always included with the comparison being a method using a singular or stereo camera.
 
-[Example video](videos/2011_09_26_drive_0005_stereo_dist.mp4)
+## Results
+Mean Absolute Error in meters of each camera method (using LiDAR as ground truth) computed on 7 select sequences (in the city category) with **bold** being the best on the corresponding sequence. *Overall* treats the sequences together.
 
-![first frame](videos/stereo_dist_thumbnail.jpg)
+| Sequence | Stereo Matching | RAFT-Stereo | DepthAnything V2 | UniDepth V2 |
+|----------|-----------------|-------------|-----------------|------------|
+| 0001     | 0.8103          | 0.6219      | 0.0826          | **0.0753**     |
+| 0005     | **0.1737**          | 0.1844      | 0.2245          | 0.1886     |
+| 0014     | 0.5555          | **0.2162**      | 0.4882          | 0.3038     |
+| 0015     | 0.5963          | **0.3810**      | 0.3876          | 0.3820     |
+| 0048     | 0.3898          | 0.2635      | 0.1751          | **0.1047**     |
+| 0052     | 0.1300          | **0.1203**      | 0.2665          | 0.1585     |
+| 0091     | 0.1314          | 0.1320      | 0.1564          | **0.0877**     |
+| overall  | 0.3875          | 0.2612      | 0.2892          | <u>**0.2172**</u>|
+
+Sub-meter accuracy across the board!
 
 ## Features
 
 * Download and process KITTI raw data sequences automatically
 
-* Compare LiDAR depth measurements with:
-
-  * Stereo matching (SGBM)
-
-  * DepthAnything V2, UniDepth V2, Metric3D V2 (monocular depth estimation)
+* Compare LiDAR depth measurements with a chosen camera method
 
 * Visualize 3D bounding boxes with depth annotations
 
@@ -49,35 +57,41 @@ uv pip install -r requirements.txt
 
 ## Usage
 
-Basic usage:
+example usage:
 
 ```bash
 python main.py --sequence 2011_09_26_drive_0048 --method stereo
 ```
-
-Or a monocular method like DepthAnything:
-
-```bash
-python main.py --sequence 2011_09_26_drive_0048 --method depthanything2
-```
-
-**I was NOT able to test Metric3D on my mps device.** Try with GPU at your own risk.
-
 Downloading KITTI zip files and deep learning model weights probably take the majority of the running time.
 
-### Arguments
+### Required Arguments
 
 * `--sequence`: KITTI sequence to download and process (e.g., `2011_09_26_drive_0048`)
 
-* `--method`: Depth comparison method - `stereo` or `depthanything2` or `unidepth`
+* `--method`: Depth comparison method - `stereo` or `raftstereo` or `depthanything2` or `unidepth`
 
-#### Optional
+### Optional Arguments
 
 * `--config`: Path to config file (default: `config.yaml`)
 
 * `--fps`: Video fps (default: 10)
 
 * `--use_distance:` Put True if xy-plane distance (radius) is desired instead of depth
+
+### Supported Methods
+
+* Stereo semi-global block matching
+
+* [DepthAnythingV2](https://github.com/DepthAnything/Depth-Anything-V2)
+
+* [RAFT-Stereo](https://github.com/princeton-vl/RAFT-Stereo)
+
+* [UniDepthV2](https://github.com/lpiccinelli-eth/UniDepth)
+
+#### Making RAFT-Stereo work
+Download [the models' weights](https://www.dropbox.com/s/ftveifyqcomiwaq/models.zip) and place the Middlebury weights (`raftstereo-middlebury.pth`) in `src/code/`
+
+**I included [Metric3D](https://github.com/YvanYin/Metric3D) in the code but was NOT able to test it on my mps device.**
 
 ### Configuration
 
@@ -126,8 +140,6 @@ Note: Not all sequences have tracklets and point clouds.
 Bird-Eye-View (BEV) based on the depth map from the method used on the left colored front camera. A bumpy ride with occlusions!
 
 [Example BEV video](videos/2011_09_26_drive_0014_unidepth_BEV.mp4)
-
-![first frame](videos/unidepth_BEV_thumbnail.jpg)
 
 example:
 

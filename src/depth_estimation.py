@@ -3,11 +3,15 @@ Depth estimation module
 Implements stereo matching and monocular methods
 """
 
+from argparse import Namespace
 import cv2
 import numpy as np
 import torch
 import os
 import sys
+sys.path.append('src')
+from core.raft_stereo import RAFTStereo
+from core.utils.utils import InputPadder
 import subprocess
 import requests
 from pathlib import Path
@@ -253,5 +257,62 @@ class Metric3DEstimator:
         print(pred_depth.shape)
 
         return pred_depth.squeeze().cpu().numpy()
+    
+class RAFTStereoEstimator:
+    """Depth estimation using RAFTStereo"""
+    
+    def __init__(self, config, calibration):
+        self.config = config
+        self.calibration = calibration
+        self.device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
+        
+        # Create model
+        self.model = RAFTStereo(Namespace(**config["architecture"])).to(self.device)
+        state = torch.load(config["inference"]["restore_ckpt"], map_location=self.device)
+
+        # Remove DataParallel stuff
+        from collections import OrderedDict
+        new_state_dict = OrderedDict()
+        for k, v in state.items():
+            name = k[7:] if k.startswith('module.') else k
+            new_state_dict[name] = v
+
+        self.model.load_state_dict(new_state_dict)
+        self.model.eval()
+        
+        # Extract calibration parameters
+        P2 = calibration.P2
+        P3 = calibration.P3
+        self.focal_length = P2[0, 0]
+        self.baseline = abs((P3[0, 3] - P2[0, 3]) / P2[0, 0])
+
+    def load_image(self, imfile):
+        img = np.array(Image.open(imfile)).astype(np.uint8)
+        img = torch.from_numpy(img).permute(2, 0, 1).float()
+        return img[None].to(self.device)
+    
+    def compute_depth(self, left_img_path, right_img_path):
+        """ Returns: depth_map: Depth in meters (HxW) """
+        left = self.load_image(left_img_path)
+        right = self.load_image(right_img_path)
+
+        with torch.no_grad():
+            padder = InputPadder(left.shape, divis_by=32)
+            left, right = padder.pad(left, right)
+            _, flow_up = self.model(left, right, iters=self.config["inference"]["valid_iters"], test_mode=True)
+            disparity = padder.unpad(flow_up).squeeze().cpu().numpy()
+        # RAFT is opposite
+        disparity = -disparity
+
+        # Avoid division by zero
+        disparity[disparity <= 0] = 0.01
+        
+        depth_map = (self.focal_length * self.baseline) / disparity
+        
+        # Clip unrealistic or irrelevant depths
+        depth_map[depth_map > 100] = 100
+        depth_map[depth_map < 0] = 0
+        
+        return depth_map
 
         

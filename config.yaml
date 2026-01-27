@@ -36,6 +36,24 @@ metric3d:
   padding: [123.675, 116.28, 103.53]
   std: [58.395, 57.12, 57.375]
 
+# RAFT-Stereo Parameters
+# using default values in https://github.com/princeton-vl/RAFT-Stereo/blob/main/demo.py
+raftstereo:
+  inference:
+    restore_ckpt: "src/core/raftstereo-middlebury.pth"
+    valid_iters: 32
+  architecture:
+    mixed_precision: false
+    hidden_dims: [128, 128, 128]
+    corr_implementation: "reg"
+    shared_backbone: false
+    corr_levels: 4
+    corr_radius: 4
+    n_downsample: 2
+    context_norm: "batch"
+    slow_fast_gru: true
+    n_gru_layers: 3
+
 # Video Output Settings
 video:
   fps: 10

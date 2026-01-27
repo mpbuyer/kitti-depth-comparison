@@ -2,6 +2,7 @@ einops
 ipykernel
 numpy>=1.21.0
 opencv-python>=4.5.0
+opt_einsum
 matplotlib>=3.3.0
 pyyaml
 Pillow>=8.0.0

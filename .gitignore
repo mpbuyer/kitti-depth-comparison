@@ -10,6 +10,8 @@ __pycache__/
 Depth-Anything-V2/
 output/
 src/__pycache__/
+src/core/__pycache__/
+src/core/utils/__pycache__/
 
 # KITTI sequences
 [0-9]*_[0-9]*_[0-9]*/
@@ -19,3 +21,4 @@ requirements_uni.txt
 unidepth_testing.py
 YOLO_testing.py
 yolo11n-seg.pt
+src/core/*.pth

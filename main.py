@@ -5,6 +5,7 @@ Compare LiDAR depth with Stereo Matching or deep learning methods
 """
 
 import argparse
+from argparse import Namespace
 import os
 import sys
 import yaml
@@ -34,7 +35,7 @@ def parse_arguments():
     parser.add_argument('--sequence',type=str,required=True,
                         help='KITTI sequence to process (e.g., 2011_09_26_drive_0048)')
 
-    parser.add_argument('--method',type=str,choices=['stereo', 'depthanything2', 'unidepth', 'metric3d'],required=True,
+    parser.add_argument('--method',type=str,choices=['stereo', 'depthanything2', 'unidepth', 'metric3d', 'raftstereo'],required=True,
                         help='Depth estimation method to compare with LiDAR')
     
     parser.add_argument('--config',type=str,default='config.yaml',
@@ -142,9 +143,12 @@ def main():
     elif args.method == 'unidepth':
         depth_estimator = UniDepthEstimator(config['unidepth'], calibration.cam_projections[cam])
         method_name += ' from UniDepth'
-    else:
+    elif args.method == 'metric3d':
         depth_estimator = Metric3DEstimator(config['metric3d'], calibration.cam_projections[cam])
         method_name += ' from Metric3D'
+    else:
+        depth_estimator = RAFTStereoEstimator(config['raftstereo'], calibration)
+        method_name += ' from RAFT-Stereo'
 
     # Initialize visualizer
     visualizer = Visualizer(config, calibration, cam)
@@ -160,19 +164,16 @@ def main():
             points = data_loader.load_velodyne_points(data_loader.point_files[frame_idx])[:, :3]
             
             # Compute depth map
-            if args.method == 'stereo':
+            if args.method == 'stereo' or args.method == 'raftstereo':
                 depth_map = depth_estimator.compute_depth(
                     data_loader.left_image_files[frame_idx],
                     data_loader.right_image_files[frame_idx]
                 )
-            elif args.method == 'depthanything2':
+            elif args.method == 'depthanything2' or args.method == 'metric3d':
                 depth_map = depth_estimator.compute_depth(img)
 
             elif args.method == 'unidepth':
                 depth_map = depth_estimator.compute_depth(data_loader.left_image_files[frame_idx])
-
-            else:
-                depth_map = depth_estimator.compute_depth(img)
             
             # Create visualizations
             img_lidar = img.copy()

@@ -1,24 +1,20 @@
 # KITTI Depth Comparison
 
-Outputs a mp4 video comparing depth estimation methods on [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) sequences. Depth being the closest point to LiDAR or camera in the forward direction inside 3d bounding boxes/"tracklets". Depth from LiDAR is always included with the comparison being a method using a singular or stereo camera.
+Outputs a mp4 video comparing depth estimation methods on [KITTI](https://www.cvlibs.net/datasets/kitti/raw_data.php) sequences. "Depth" being the closest point to LiDAR or camera in the forward direction inside 3d bounding boxes/"tracklets". Depth from LiDAR is always included with the comparison being a method using a singular or stereo camera.
 
 https://github.com/user-attachments/assets/fcdf5cb9-db62-4637-beee-a75948f66b22
 
 ## Results
-Mean Absolute Error in meters of each camera method (using LiDAR as ground truth) computed on 7 select sequences (in the city category) with **bold** being the best on the corresponding sequence. *Overall* treats the sequences together.
+Aggregated across sequences 0001, 0005, 0014, 0015, 0048, 0052, and 0091 using LiDAR as ground truth.
 
-| Sequence | Stereo Matching | RAFT-Stereo | DepthAnything V2 | UniDepth V2 |
-|----------|-----------------|-------------|-----------------|------------|
-| 0001     | 0.8103          | 0.6219      | 0.0826          | **0.0753**     |
-| 0005     | **0.1737**          | 0.1844      | 0.2245          | 0.1886     |
-| 0014     | 0.5555          | **0.2162**      | 0.4882          | 0.3038     |
-| 0015     | 0.5963          | **0.3810**      | 0.3876          | 0.3820     |
-| 0048     | 0.3898          | 0.2635      | 0.1751          | **0.1047**     |
-| 0052     | 0.1300          | **0.1203**      | 0.2665          | 0.1585     |
-| 0091     | 0.1314          | 0.1320      | 0.1564          | **0.0877**     |
-| overall  | 0.3875          | 0.2612      | 0.2892          | <u>**0.2172**</u>|
+| Method          | Abs Rel Error| RMSE        | δ < 1.25    |
+|-----------------|--------------|-------------|-------------|
+| Stereo Matching | 0.0171       | 0.8852      | 0.9912      |
+| RAFT-Stereo     | **0.0102**   | **0.7132**  | **1.0000**  |
+| DepthAnything V2| 0.0206       | 0.9791      | 0.9898      |
+| UniDepth V2     | 0.0158       | 0.9754      | 0.9893      |
 
-Sub-meter accuracy across the board!
+Centimeter-level accuracy on objects 10m or closer. Objects 30m+ away are occasionally a few meters off, keeping RMSE close to 1.
 
 ## Features
 
@@ -36,9 +32,7 @@ Sub-meter accuracy across the board!
 
 * [uv](https://github.com/astral-sh/uv), git
 
-* GPU ideally or mps (for neural network inference)
-
-* \~2GB disk space per sequence (and deep learning models)
+* \~2GB disk space per sequence and deep learning model
 
 ## Installation
 

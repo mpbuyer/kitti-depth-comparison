@@ -85,7 +85,7 @@ Downloading KITTI zip files and deep learning model weights probably take the ma
 * [UniDepthV2](https://github.com/lpiccinelli-eth/UniDepth)
 
 #### Making RAFT-Stereo work
-Download [the models' weights](https://www.dropbox.com/s/ftveifyqcomiwaq/models.zip) and place the Middlebury weights (`raftstereo-middlebury.pth`) in `src/code/`
+Download [the models' weights](https://www.dropbox.com/s/ftveifyqcomiwaq/models.zip) and place the Middlebury weights (`raftstereo-middlebury.pth`) in `src/core/`
 
 **I included [Metric3D](https://github.com/YvanYin/Metric3D) in the code but was NOT able to test it on my mps device.**
 
